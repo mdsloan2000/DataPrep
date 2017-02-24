@@ -72,7 +72,7 @@ def main():
     
     output_header = "\n51100, Spring 2017\n"\
                 + "Name:  Mike Sloan\n"\
-                + "PROGRAMMING ASSIGNMENT #5"
+                + "PROGRAMMING ASSIGNMENT #5\n"
                 
     #Import CSV to a Dataframe and create original copy in memory
     energy_data = pd.read_csv(data_file,index_col=0,na_values='..')
@@ -96,14 +96,15 @@ def main():
     for j, country in enumerate(energy_data.index) :
         energy_data.loc[country,'Continent'] = continent[country]
     
-    #Build Summary Dataframe - by grabbing unique continets
+    #Build Summary Dataframe - by grabbing unique continents
     rows=(energy_data['Continent'].unique())
-    #rows.sort()
     energy_summary = DataFrame(index = rows, columns=summary_columns)
     
+    #Calculate Comparison Stats
     world_stats['world_mean'] = (energy_data.mean(axis=1)).mean(axis=0)
     world_stats['world_stdev'] = (energy_data.mean(axis=1)).std(axis=0) 
     
+    # Go through each continent, calculating summary data and comparing to world
     for k, summary_continent in enumerate(energy_summary.index) :
         local_small = 0
         local_avg   = 0
@@ -122,6 +123,7 @@ def main():
             else :
                 local_avg = 1
                
+        #Stores cached values to the dataframe for given content.
         energy_summary.loc[summary_continent, 'small'] = local_small
         energy_summary.loc[summary_continent, 'avg'] = local_avg
         energy_summary.loc[summary_continent, 'large'] = local_large  
